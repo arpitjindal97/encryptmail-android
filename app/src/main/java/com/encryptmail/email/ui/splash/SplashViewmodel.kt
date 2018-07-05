@@ -1,7 +1,7 @@
 package com.encryptmail.email.ui.splash
 
-import android.arch.lifecycle.ViewModel
+import com.encryptmail.email.ui.base.BaseViewModel
 
-class SplashViewmodel : ViewModel(){
+class SplashViewmodel : BaseViewModel() {
 
 }
