@@ -2,7 +2,8 @@ package com.encryptmail.email.di
 
 import com.encryptmail.email.MyApplication
 import com.encryptmail.email.ui.base.BaseActivity
-import com.encryptmail.email.ui.base.BaseViewModel
+import com.encryptmail.email.ui.login.LoginViewModel
+import com.encryptmail.email.ui.splash.SplashViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -14,7 +15,9 @@ interface AppComponent {
 
     fun inject(baseActivity: BaseActivity)
 
-    fun inject(baseViewModel: BaseViewModel)
+    fun inject(splashViewModel: SplashViewModel)
+
+    fun inject(loginViewModel: LoginViewModel)
 
 
 }

@@ -2,8 +2,8 @@
 
 buildscript {
     ext{
-        kotlin_version = '1.2.50'
-        gradle_version = '3.1.3'
+        kotlin_version = '1.2.+'
+        gradle_version = '3.1.+'
         google_svc_version = '4.0.1'
     }
     repositories {
