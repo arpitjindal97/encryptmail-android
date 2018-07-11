@@ -5,6 +5,7 @@ import android.content.Context
 import com.encryptmail.email.data.Repository
 import com.encryptmail.email.data.db.AccountDao
 import com.encryptmail.email.data.db.MyDatabase
+import com.encryptmail.email.data.network.LoginRequest
 import dagger.Module
 import dagger.Provides
 import java.util.concurrent.Executor
@@ -29,8 +30,8 @@ class RoomModule {
 
     @Singleton
     @Provides
-    fun provideDBHelper(accountDao: AccountDao,executor: Executor): Repository =
-            Repository(accountDao,executor)
+    fun provideDBHelper(accountDao: AccountDao,executor: Executor,loginRequest: LoginRequest): Repository =
+            Repository(accountDao,executor,loginRequest)
 
     @Singleton
     @Provides

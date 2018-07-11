@@ -60,6 +60,8 @@ dependencies {
     implementation "com.androidhuman.rxfirebase2:firebase-auth:$firebase_auth_version.0"
     implementation "com.androidhuman.rxfirebase2:firebase-core:$firebase_core_version.0"
     implementation "com.google.android.gms:play-services-auth:$play_auth_version"
+    implementation "com.google.android.gms:play-services-drive:$play_auth_version"
+
 
     implementation("com.mikepenz:materialdrawer:$materialdrawer_version") {
         transitive = true

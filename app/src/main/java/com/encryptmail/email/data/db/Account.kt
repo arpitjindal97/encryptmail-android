@@ -8,7 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy.REPLACE
 @Entity
 open class Account constructor(
         var email: String,
-        var googleAccount: String) {
+        var authStatJSON: String) {
 
     @PrimaryKey
     var id: Int = 0

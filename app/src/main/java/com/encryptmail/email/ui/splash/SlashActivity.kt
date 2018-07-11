@@ -9,7 +9,10 @@ import com.encryptmail.email.R
 import com.encryptmail.email.ui.base.BaseActivity
 import com.encryptmail.email.ui.login.LoginActivity
 import com.encryptmail.email.ui.main.MainActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthCredential
 
 class SlashActivity : BaseActivity() {
 
