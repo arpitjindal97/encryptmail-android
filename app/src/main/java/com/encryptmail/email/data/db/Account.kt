@@ -3,16 +3,15 @@ package com.encryptmail.email.data.db
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import com.encryptmail.email.data.db.model.UserInfo
 
 
 @Entity
 open class Account constructor(
-        var email: String,
-        var authStatJSON: String) {
+        @PrimaryKey var email: String,
+        var userInfo: UserInfo,
+        var authStateJSON: String)
 
-    @PrimaryKey
-    var id: Int = 0
-}
 
 @Dao
 interface AccountDao {

@@ -7,6 +7,7 @@ import android.content.Intent
 import com.encryptmail.email.MyApplication
 import com.encryptmail.email.data.Repository
 import com.encryptmail.email.ui.base.BaseViewModel
+import net.openid.appauth.AuthState
 import javax.inject.Inject
 
 class LoginViewModel : BaseViewModel() {
@@ -14,25 +15,25 @@ class LoginViewModel : BaseViewModel() {
     @Inject
     lateinit var repository: Repository
 
-    private var authStatLiveData = MutableLiveData<String>()
+    private var authStateLiveData = MutableLiveData<AuthState>()
 
     init {
         MyApplication.appComponent.inject(this)
     }
 
-    fun googleSignIn(context: Context) {
-        repository.googleSignIn(context)
+    fun signIn(context: Context,requestCode: Int) {
+        repository.signIn(context,requestCode)
     }
 
-    fun getAuthStatLiveData(): LiveData<String> {
-        return authStatLiveData
+    fun getAuthStateLiveData(): LiveData<AuthState> {
+        return authStateLiveData
     }
 
     fun onActivityResult(requestCode: Int, data: Intent?, context: Context) {
-        repository.processActivityResult(requestCode, data, authStatLiveData, context)
+        repository.processActivityResult(requestCode, data, authStateLiveData, context)
     }
 
-    fun insertIntoDatabase(authStat: String) {
-        repository.insertAccount(authStat)
+    fun insertIntoDatabase(authState: AuthState) {
+        repository.insertAccount(authState)
     }
 }

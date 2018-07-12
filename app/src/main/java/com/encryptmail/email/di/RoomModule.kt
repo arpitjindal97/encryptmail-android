@@ -30,11 +30,6 @@ class RoomModule {
 
     @Singleton
     @Provides
-    fun provideDBHelper(accountDao: AccountDao,executor: Executor,loginRequest: LoginRequest): Repository =
-            Repository(accountDao,executor,loginRequest)
-
-    @Singleton
-    @Provides
     fun provideExecutor(): Executor {
         return Executors.newFixedThreadPool(2)
     }

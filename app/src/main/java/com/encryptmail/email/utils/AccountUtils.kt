@@ -4,16 +4,17 @@ import android.util.Log
 import com.encryptmail.email.data.db.Account
 import com.google.android.gms.auth.api.signin.*
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import net.openid.appauth.AuthState
 
 class AccountUtils {
     companion object {
-        fun getArrayAuthStat(arrayAccount: Array<Account>?): ArrayList<String> {
-            val arrayAuthStat = ArrayList<String>()
+        fun getArrayAuthState(arrayAccount: Array<Account>?): ArrayList<AuthState> {
+            val arrayAuthStat = ArrayList<AuthState>()
 
             if (arrayAccount != null) {
                 for (account in arrayAccount) {
 
-                    val authStat = account.authStatJSON
+                    val authStat = AuthState.jsonDeserialize(account.authStateJSON)
 
                     arrayAuthStat.add(authStat)
                 }

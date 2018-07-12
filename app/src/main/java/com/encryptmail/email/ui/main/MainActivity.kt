@@ -3,28 +3,18 @@ package com.encryptmail.email.ui.main
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.encryptmail.email.MyApplication
 import com.encryptmail.email.R
 import com.encryptmail.email.data.db.Account
 import com.encryptmail.email.ui.base.BaseActivity
 import com.encryptmail.email.utils.AccountUtils
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.drive.Drive
-import com.google.android.gms.drive.DriveFolder
-import com.google.android.gms.drive.MetadataBuffer
-import com.google.android.gms.drive.MetadataChangeSet
-import com.google.android.gms.drive.query.Filters
-import com.google.android.gms.drive.query.Query
-import com.google.android.gms.drive.query.SearchableField
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : BaseActivity() {
@@ -46,8 +36,8 @@ class MainActivity : BaseActivity() {
         viewModel.getListAccount().observe(this, Observer { array ->
             addProfilesToHeader(array)
         })
-        viewModel.getActiveProfile().observe(this, Observer { authStat ->
-            updateAccount(authStat)
+        viewModel.getActiveProfile().observe(this, Observer { account ->
+            updateAccount(account)
         })
 
         accountHeader = AccountHeaderBuilder()
@@ -74,30 +64,27 @@ class MainActivity : BaseActivity() {
 
     private fun addProfilesToHeader(array: Array<Account>?) {
         if (array != null) {
-            /*
-            for (googleAccount in AccountUtils.getArrayGoogleSignInAccount(array)) {
 
+            accountHeader.clear()
+            for (account in array) {
 
-                val profileDrawerItem = AccountUtils.getProfileDrawerItem(googleAccount)
+                val profileDrawerItem = ProfileDrawerItem()
+                        .withName(account.userInfo.name)
+                        .withEmail(account.userInfo.email)
+                        .withIcon(account.userInfo.picture)
 
-                accountHeader.addProfile(profileDrawerItem, accountHeader.profiles.size)
+                accountHeader.addProfiles(profileDrawerItem)
 
-                if (FirebaseAuth.getInstance().currentUser?.email == googleAccount.email) {
-                    viewModel.setActiveProfile(googleAccount)
+                if (FirebaseAuth.getInstance().currentUser?.email == account.userInfo.email) {
+                    viewModel.setActiveProfile(account)
                 }
-            }
-            */
-            if (array.isNotEmpty()) {
-                viewModel.setActiveProfile(array[0].authStatJSON)
-            } else {
-                Toast.makeText(this,"Array is empty",Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun updateAccount(authStat: String?) {
+    private fun updateAccount(account: Account?) {
 
-        Toast.makeText(this, "AuthStat: $authStat", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, "AuthStat: ", Toast.LENGTH_LONG).show()
 
     }
 

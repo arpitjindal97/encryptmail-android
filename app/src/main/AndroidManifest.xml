@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest package="com.encryptmail.email"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -24,8 +25,24 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.login.LoginActivity"/>
-        <activity android:name=".ui.main.MainActivity"
+        <activity
+            android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            tools:node="replace">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:scheme="com.encryptmail.email"
+                    android:path="/oauth2callback"
+                    tools:ignore="AppLinkUrlError"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

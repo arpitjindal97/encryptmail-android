@@ -11,6 +11,7 @@ import com.encryptmail.email.utils.AccountUtils
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
+import net.openid.appauth.AuthState
 import javax.inject.Inject
 
 class MainViewModel : BaseViewModel() {
@@ -21,18 +22,18 @@ class MainViewModel : BaseViewModel() {
         MyApplication.appComponent.inject(this)
     }
 
-    private var activeProfile = MutableLiveData<String>()
+    private var activeProfile = MutableLiveData<Account>()
 
     fun getListAccount(): LiveData<Array<Account>> {
         return repository.getAllAccount()
     }
 
-    fun getActiveProfile(): LiveData<String> {
+    fun getActiveProfile(): LiveData<Account> {
         return activeProfile
     }
 
-    fun setActiveProfile(authStat: String) {
+    fun setActiveProfile(authState: Account) {
 
-        activeProfile.value = authStat
+        activeProfile.value = authState
     }
 }

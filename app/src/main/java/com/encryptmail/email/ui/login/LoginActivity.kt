@@ -4,18 +4,17 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.encryptmail.email.MyApplication
 import com.encryptmail.email.R
 import com.encryptmail.email.ui.base.BaseActivity
 import com.encryptmail.email.ui.main.MainActivity
+import com.encryptmail.email.utils.ConstantsUtil
 import com.google.android.gms.common.SignInButton
 import kotlinx.android.synthetic.main.login_activity.*
+import net.openid.appauth.AuthState
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
-
 
     private lateinit var viewModel: LoginViewModel
     private var back: Boolean = false
@@ -39,8 +38,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         sign_in_button.setOnClickListener(this)
 
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        viewModel.getAuthStatLiveData().observe(this, Observer { authStat ->
-            viewModel.insertIntoDatabase(authStat as String)
+        viewModel.getAuthStateLiveData().observe(this, Observer { authState ->
+            viewModel.insertIntoDatabase(authState as AuthState)
             updateUI()
         })
 
@@ -50,7 +49,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         if (back) {
             finish()
         } else {
-            Toast.makeText(this, "Logged in Successfully", Toast.LENGTH_LONG).show()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -65,7 +63,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.sign_in_button -> {
-                viewModel.googleSignIn(this)
+                viewModel.signIn(this, ConstantsUtil.RC_OPENID)
             }
         }
     }

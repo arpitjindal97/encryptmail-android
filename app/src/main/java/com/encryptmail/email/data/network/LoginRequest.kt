@@ -1,12 +1,12 @@
 package com.encryptmail.email.data.network
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.androidhuman.rxfirebase2.auth.rxSignInWithCredential
 import com.encryptmail.email.R
+import com.encryptmail.email.data.network.login.LoginGoogle
 import com.encryptmail.email.ui.login.LoginActivity
 import com.encryptmail.email.utils.ConstantsUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,17 +17,18 @@ import com.google.android.gms.common.api.Scope
 import com.google.android.gms.drive.Drive
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import net.openid.appauth.AuthState
 import javax.inject.Singleton
 
 @Singleton
-class LoginRequest {
+class LoginRequest constructor(private val loginGoogle: LoginGoogle) {
 
     fun googleSignIn(context: Context) {
 
         val gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_web_client_id))
-                .requestServerAuthCode(context.getString(R.string.default_web_client_id))
+                .requestIdToken(context.getString(R.string.default_android_client_id))
+                .requestServerAuthCode(context.getString(R.string.default_android_client_id))
                 .requestScopes(Scope("https://www.googleapis.com/auth/drive"))
                 .requestScopes(Drive.SCOPE_FILE)
                 .requestScopes(Drive.SCOPE_APPFOLDER)
@@ -38,9 +39,15 @@ class LoginRequest {
         (context as LoginActivity).startActivityForResult(signInIntent, ConstantsUtil.RC_GOOGLE_SIGN_IN)
     }
 
+    fun signIn(context: Context, requestCode: Int) {
+        if (requestCode == ConstantsUtil.RC_OPENID) {
+            loginGoogle.signIn(context)
+        }
+    }
+
     fun processActivityResult(requestCode: Int,
                               data: Intent?,
-                              authStatLiveData: MutableLiveData<String>,
+                              authStateLiveData: MutableLiveData<AuthState>,
                               context: Context) {
 
 
@@ -49,17 +56,19 @@ class LoginRequest {
 
             try {
                 val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account, authStatLiveData, context)
+                firebaseAuthWithGoogle(account, authStateLiveData, context)
 
             } catch (e: ApiException) {
                 Toast.makeText(context, "Error : " + e.message, Toast.LENGTH_LONG).show()
             }
+        } else if (requestCode == ConstantsUtil.RC_OPENID) {
+            loginGoogle.processActivityResult(data, authStateLiveData, context)
         }
     }
 
     private fun firebaseAuthWithGoogle(
             account: GoogleSignInAccount,
-            authStatLiveData: MutableLiveData<String>,
+            authStateLiveData: MutableLiveData<AuthState>,
             context: Context) {
 
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
@@ -67,7 +76,7 @@ class LoginRequest {
         FirebaseAuth.getInstance().rxSignInWithCredential(credential).subscribe(
                 {
                     val authStat = "token received"
-                    exchangeAuthCode(authStat,authStatLiveData)
+                    exchangeAuthCode(authStat, authStateLiveData)
 
                 }) { e ->
 
@@ -75,10 +84,9 @@ class LoginRequest {
         }
     }
 
-    private fun exchangeAuthCode(authStat: String,authStatLiveData: MutableLiveData<String>) {
+    private fun exchangeAuthCode(authStat: String, authStatLiveData: MutableLiveData<AuthState>) {
 
         // exchange and set authStat.value.accessToken
-        authStatLiveData.value = authStat
 
     }
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">EncryptMail</string>
     <string name="app_description">PGP encrypted mail</string>
+    <string name="default_android_client_id">1051514454731-hrvk3ivs9fe910c10i1jd2ev1704f4s2.apps.googleusercontent.com</string>
 </resources>
