@@ -2,10 +2,9 @@ package com.encryptmail.email.di
 
 import android.arch.persistence.room.Room
 import android.content.Context
-import com.encryptmail.email.data.Repository
 import com.encryptmail.email.data.db.AccountDao
+import com.encryptmail.email.data.db.ActiveAccountDao
 import com.encryptmail.email.data.db.MyDatabase
-import com.encryptmail.email.data.network.LoginRequest
 import dagger.Module
 import dagger.Provides
 import java.util.concurrent.Executor
@@ -33,5 +32,10 @@ class RoomModule {
     fun provideExecutor(): Executor {
         return Executors.newFixedThreadPool(2)
     }
+
+    @Singleton
+    @Provides
+    fun provideActiveAccountDao(database: MyDatabase): ActiveAccountDao =
+            database.activeAccountDao()
 }
 

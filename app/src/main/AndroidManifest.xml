@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         >
         <activity
-            android:name=".ui.splash.SlashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,12 +34,13 @@
             tools:node="replace">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:scheme="com.encryptmail.email"
                     android:path="/oauth2callback"
+                    android:scheme="com.encryptmail.email"
                     tools:ignore="AppLinkUrlError"/>
             </intent-filter>
         </activity>

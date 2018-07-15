@@ -5,9 +5,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
 import com.encryptmail.email.di.AppComponent
-import com.encryptmail.email.di.AppModule
 import com.encryptmail.email.di.DaggerAppComponent
-import com.encryptmail.email.di.RoomModule
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.squareup.picasso.Picasso

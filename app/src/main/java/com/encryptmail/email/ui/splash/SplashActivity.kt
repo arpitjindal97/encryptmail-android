@@ -1,24 +1,16 @@
 package com.encryptmail.email.ui.splash
 
-import android.app.Activity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.widget.Toast
 import com.encryptmail.email.R
+import com.encryptmail.email.data.db.ActiveAccount
 import com.encryptmail.email.ui.base.BaseActivity
 import com.encryptmail.email.ui.login.LoginActivity
 import com.encryptmail.email.ui.main.MainActivity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthCredential
 
-class SlashActivity : BaseActivity() {
-
-    companion object {
-        const val RC_REQUEST_PERMISSION_SUCCESS_CONTINUE_FILE_CREATION = 444
-    }
+class SplashActivity : BaseActivity() {
 
     private lateinit var viewModel: SplashViewModel
 
@@ -26,17 +18,23 @@ class SlashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_activity)
 
-        Handler().postDelayed({
-            updateUI()
-        }, 1000)
-
     }
 
+    override fun onStart() {
+        super.onStart()
 
-    private fun updateUI() {
+        viewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
+        viewModel.getActiveAccount().observe(this, Observer { activeAccount ->
 
-        var intent: Intent
-        if (FirebaseAuth.getInstance().currentUser != null) {
+            updateUI(activeAccount)
+
+        })
+    }
+
+    private fun updateUI(activeAccount: ActiveAccount?) {
+
+        val intent: Intent
+        if (activeAccount != null) {
             /*
             if (!GoogleSignIn.hasPermissions(
                             GoogleSignIn.getLastSignedInAccount(this),
@@ -62,12 +60,4 @@ class SlashActivity : BaseActivity() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            if (RC_REQUEST_PERMISSION_SUCCESS_CONTINUE_FILE_CREATION == requestCode) {
-                Toast.makeText(this, "got the permission", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
 }

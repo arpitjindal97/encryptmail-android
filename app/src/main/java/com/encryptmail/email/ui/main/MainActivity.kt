@@ -4,12 +4,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.widget.Toast
-import com.encryptmail.email.MyApplication
 import com.encryptmail.email.R
 import com.encryptmail.email.data.db.Account
+import com.encryptmail.email.data.db.ActiveAccount
 import com.encryptmail.email.ui.base.BaseActivity
-import com.encryptmail.email.utils.AccountUtils
-import com.google.firebase.auth.FirebaseAuth
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -29,17 +27,6 @@ class MainActivity : BaseActivity() {
 
         setSupportActionBar(main_toolbar)
 
-        MyApplication.appComponent.inject(this)
-
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-
-        viewModel.getListAccount().observe(this, Observer { array ->
-            addProfilesToHeader(array)
-        })
-        viewModel.getActiveProfile().observe(this, Observer { account ->
-            updateAccount(account)
-        })
-
         accountHeader = AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header)
@@ -47,7 +34,6 @@ class MainActivity : BaseActivity() {
                     false
                 }
                 .build()
-
 
         drawer = DrawerBuilder()
                 .withActivity(this)
@@ -60,6 +46,16 @@ class MainActivity : BaseActivity() {
                 )
                 .build()
 
+
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
+        viewModel.getListAccount().observe(this, Observer { array ->
+            addProfilesToHeader(array)
+        })
+        viewModel.getActiveAccount().observe(this, Observer { activeAccount ->
+            if (activeAccount != null)
+                updateAccount(activeAccount)
+        })
     }
 
     private fun addProfilesToHeader(array: Array<Account>?) {
@@ -75,16 +71,13 @@ class MainActivity : BaseActivity() {
 
                 accountHeader.addProfiles(profileDrawerItem)
 
-                if (FirebaseAuth.getInstance().currentUser?.email == account.userInfo.email) {
-                    viewModel.setActiveProfile(account)
-                }
             }
         }
     }
 
-    private fun updateAccount(account: Account?) {
+    private fun updateAccount(activeAccount: ActiveAccount?) {
 
-        //Toast.makeText(this, "AuthStat: ", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "This is active account: " + activeAccount?.email, Toast.LENGTH_LONG).show()
 
     }
 
